@@ -3,7 +3,7 @@ import Authenticator from '../lib/authenticator'
 import { MockRedisClient, MockOAuthApi, MockApi } from './_mocks'
 import Session from '../lib/session'
 
-test('_validateCredentials returns true for valid credentials object', t => {
+test('_validateCredentials returns true for valid credentials object', (t) => {
   let creds = {
     body: {
       email: 'me@me.co',
@@ -13,7 +13,7 @@ test('_validateCredentials returns true for valid credentials object', t => {
   t.true(new Authenticator()._validateCredentials(creds))
 })
 
-test('_validateCredentials returns false when missing email', t => {
+test('_validateCredentials returns false when missing email', (t) => {
   let creds = {
     body: {
       name: 'username',
@@ -23,7 +23,7 @@ test('_validateCredentials returns false when missing email', t => {
   t.false(new Authenticator()._validateCredentials(creds))
 })
 
-test('_validateCredentials returns false when missing password', t => {
+test('_validateCredentials returns false when missing password', (t) => {
   let creds = {
     body: {
       name: 'username',
@@ -34,72 +34,73 @@ test('_validateCredentials returns false when missing password', t => {
   t.false(new Authenticator()._validateCredentials(creds))
 })
 
-test('_getSession returns null if precondition not met', async t => {
-  return new Authenticator()._getSession().then(session => {
+// note that standard 6 + babel-eslint 4/5 blows up with `async (t) =>`
+test('_getSession returns null if precondition not met', async function (t) {
+  return new Authenticator()._getSession().then((session) => {
     t.is(session, null)
   })
 })
 
-test('_getSession returns session if precondition is met', async t => {
-  return new Authenticator({ redisClient: new MockRedisClient() })._getSession(true).then(session => {
+test('_getSession returns session if precondition is met', async function (t) {
+  return new Authenticator({ redisClient: new MockRedisClient() })._getSession(true).then((session) => {
     t.ok(session)
   })
 })
 
-test('_getSession returns same session if called twice', async t => {
+test('_getSession returns same session if called twice', async function (t) {
   let s
   let authenticator = new Authenticator({ redisClient: new MockRedisClient() })
-  authenticator._getSession(true).then(session => {
+  authenticator._getSession(true).then((session) => {
     s = session
   })
-  return authenticator._getSession(true).then(session => {
+  return authenticator._getSession(true).then((session) => {
     t.same(session, s)
   })
 })
 
-test('_storeRefreshToken does not attempt to store without session', async t => {
+test('_storeRefreshToken does not attempt to store without session', async function (t) {
   let authentication = {
     token: 'hello',
     refreshToken: 'world'
   }
-  return new Authenticator()._storeRefreshToken(null, authentication).then(result => {
+  return new Authenticator()._storeRefreshToken(null, authentication).then((result) => {
     t.is(result, null)
   })
 })
 
-test('_storeRefreshToken does not attempt to store without authentication', async t => {
+test('_storeRefreshToken does not attempt to store without authentication', async function (t) {
   let session = new Session({ redisClient: new MockRedisClient() })
-  return new Authenticator()._storeRefreshToken(session, null).then(result => {
+  return new Authenticator()._storeRefreshToken(session, null).then((result) => {
     t.is(result, null)
   })
 })
 
-test('_storeRefreshToken stores refresh token with session and authentication', async t => {
+test('_storeRefreshToken stores refresh token with session and authentication', async function (t) {
   let session = new Session({ redisClient: new MockRedisClient('hello') })
   let authentication = {
     token: 'hello',
     refreshToken: 'world'
   }
-  return new Authenticator()._storeRefreshToken(session, authentication).then(result => {
+  return new Authenticator()._storeRefreshToken(session, authentication).then((result) => {
     t.is(result, 'OK')
   })
 })
 
-test('_dropRefreshToken attempts to delete refresh token', async t => {
+test('_dropRefreshToken attempts to delete refresh token', async function (t) {
   let session = new Session({ redisClient: new MockRedisClient() })
-  return new Authenticator()._dropRefreshToken(session, 'token').then(result => {
+  return new Authenticator()._dropRefreshToken(session, 'token').then((result) => {
     t.is(result, 1)
   })
 })
 
-test('_getAuthorizationToken returns valid structure', async t => {
+test('_getAuthorizationToken returns valid structure', async function (t) {
   let oauthApi = new MockOAuthApi({ access_token: 'yo', refresh_token: 'wuddup' })
   let api = new MockApi({ username: 'fidget' })
   return new Authenticator({ oauthApi: oauthApi, api: api })._getAuthorizationToken({
     email: 'me@me.co',
     password: 'paddywagon',
     name: 'overwritten'
-  }).then(auth => {
+  }).then((auth) => {
     t.same(auth, {
       token: 'yo',
       user: {
@@ -111,21 +112,21 @@ test('_getAuthorizationToken returns valid structure', async t => {
   })
 })
 
-test('_getAuthorizationToken allows you to catch() an error', async t => {
+test('_getAuthorizationToken allows you to catch() an error', async function (t) {
   let oauthApi = new MockOAuthApi(new Error('problemos muchachos'))
-  return new Authenticator({ oauthApi: oauthApi })._getAuthorizationToken().catch(err => {
+  return new Authenticator({ oauthApi: oauthApi })._getAuthorizationToken().catch((err) => {
     t.ok(err)
   })
 })
 
-test('authenticate rejects invalid credentials', async t => {
-  new Authenticator().authenticate(null, err => {
+test('authenticate rejects invalid credentials', async function (t) {
+  new Authenticator().authenticate(null, (err) => {
     t.ok(err)
     t.is(err.statusCode, 500)
   })
 })
 
-test('authenticate calls oauth api, stores a refresh token, and returns npm-auth-ws structure', async t => {
+test('authenticate calls oauth api, stores a refresh token, and returns npm-auth-ws structure', async function (t) {
   let redisClient = new MockRedisClient()
   return new Authenticator({
     redisClient: redisClient,
@@ -149,7 +150,7 @@ test('authenticate calls oauth api, stores a refresh token, and returns npm-auth
   })
 })
 
-test('unauthenticate attempts to delete refresh token', async t => {
+test('unauthenticate attempts to delete refresh token', async function (t) {
   let redisClient = new MockRedisClient()
   return new Authenticator({
     redisClient: redisClient
@@ -159,7 +160,7 @@ test('unauthenticate attempts to delete refresh token', async t => {
   })
 })
 
-test('unauthenticate swallows errors', async t => {
+test('unauthenticate swallows errors', async function (t) {
   let redisClient = new MockRedisClient()
   redisClient.del = function (key, cb) {
     process.nextTick(function () {
