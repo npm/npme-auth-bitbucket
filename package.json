@@ -1,8 +1,12 @@
 {
   "name": "@npm/npmo-auth-bitbucket",
   "version": "0.1.1",
-  "description": "Integrate Bitbucket auth in your npm On-Site instance",
+  "description": "Integrate Bitbucket auth in your npm Enterprise instance",
   "main": "index.js",
+  "files": [
+    "lib",
+    "index.js"
+  ],
   "scripts": {
     "pretest": "standard",
     "test": "nyc ava",
@@ -15,8 +19,7 @@
   "keywords": [
     "bitbucket",
     "atlassian",
-    "onsite",
-    "on-site",
+    "enterprise",
     "npmo",
     "oauth",
     "oauth2"
