@@ -1,8 +1,12 @@
 {
-  "name": "@npm/npmo-auth-bitbucket",
+  "name": "@npm/npme-auth-bitbucket",
   "version": "0.1.1",
-  "description": "Integrate Bitbucket auth in your npm On-Site instance",
+  "description": "Integrate Bitbucket auth in your npm Enterprise instance",
   "main": "index.js",
+  "files": [
+    "lib",
+    "index.js"
+  ],
   "scripts": {
     "pretest": "standard",
     "test": "nyc ava",
@@ -10,36 +14,35 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/npm/npmo-auth-bitbucket.git"
+    "url": "git+ssh://git@github.com/npm/npme-auth-bitbucket.git"
   },
   "keywords": [
     "bitbucket",
     "atlassian",
-    "onsite",
-    "on-site",
-    "npmo",
+    "enterprise",
+    "npme",
     "oauth",
     "oauth2"
   ],
   "author": "Andrew Goode <andrew@npmjs.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/npm/npmo-auth-bitbucket/issues"
+    "url": "https://github.com/npm/npme-auth-bitbucket/issues"
   },
-  "homepage": "https://github.com/npm/npmo-auth-bitbucket#readme",
+  "homepage": "https://github.com/npm/npme-auth-bitbucket#readme",
   "dependencies": {
-    "bluebird": "^3.2.2",
+    "bluebird": "^3.3.5",
     "github-url-from-git": "^1.4.0",
-    "got": "^5.4.1",
-    "redis": "^2.4.2",
+    "got": "^6.3.0",
+    "redis": "^2.5.3",
     "verror": "^1.6.1"
   },
   "devDependencies": {
-    "ava": "^0.11.0",
-    "babel-eslint": "^4.1.8",
-    "coveralls": "^2.11.8",
-    "nyc": "^5.6.0",
-    "standard": "^6.0.4"
+    "ava": "^0.14.0",
+    "babel-eslint": "^6.0.4",
+    "coveralls": "^2.11.9",
+    "nyc": "^6.4.4",
+    "standard": "^7.1.0"
   },
   "standard": {
     "parser": "babel-eslint"
