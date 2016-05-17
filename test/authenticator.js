@@ -3,7 +3,7 @@ import Authenticator from '../lib/authenticator'
 import { MockRedisClient, MockOAuthApi, MockApi } from './_mocks'
 import Session from '../lib/session'
 
-test('_validateCredentials returns true for valid credentials object', (t) => {
+test('_validateCredentials returns true for email and password', (t) => {
   let creds = {
     body: {
       email: 'me@me.co',
@@ -13,14 +13,14 @@ test('_validateCredentials returns true for valid credentials object', (t) => {
   t.true(new Authenticator()._validateCredentials(creds))
 })
 
-test('_validateCredentials returns false when missing email', (t) => {
+test('_validateCredentials returns true for name and password', (t) => {
   let creds = {
     body: {
-      name: 'username',
+      name: 'me@me.co',
       password: 'my really cool password'
     }
   }
-  t.false(new Authenticator()._validateCredentials(creds))
+  t.true(new Authenticator()._validateCredentials(creds))
 })
 
 test('_validateCredentials returns false when missing password', (t) => {
@@ -29,6 +29,17 @@ test('_validateCredentials returns false when missing password', (t) => {
       name: 'username',
       email: 'me@me.co',
       password: ''
+    }
+  }
+  t.false(new Authenticator()._validateCredentials(creds))
+})
+
+test('_validateCredentials returns false when missing name and email', (t) => {
+  let creds = {
+    body: {
+      name: '',
+      email: '',
+      password: 'my really cool password'
     }
   }
   t.false(new Authenticator()._validateCredentials(creds))
@@ -137,6 +148,29 @@ test('authenticate calls oauth api, stores a refresh token, and returns npm-auth
       name: 'blahblah',
       password: 'sugary',
       email: 'flippers@co.co'
+    }
+  }, (err, authentication) => {
+    t.falsy(err)
+    t.truthy(authentication)
+    t.is(authentication.token, 'hola')
+    t.is(authentication.refreshToken, 'mundo')
+    t.is(authentication.user.name, 'fundip')
+    t.is(authentication.user.email, 'flippers@co.co')
+    t.is(redisClient.setKey, 'refresh-hola')
+    t.is(redisClient.setValue, 'mundo')
+  })
+})
+
+test('authenticate interprets name as email when no email given (for website login)', async function (t) {
+  let redisClient = new MockRedisClient()
+  return new Authenticator({
+    redisClient: redisClient,
+    oauthApi: new MockOAuthApi({ access_token: 'hola', refresh_token: 'mundo' }),
+    api: new MockApi({ username: 'fundip' })
+  }).authenticate({
+    body: {
+      name: 'flippers@co.co',
+      password: 'donutsaredelish'
     }
   }, (err, authentication) => {
     t.falsy(err)
