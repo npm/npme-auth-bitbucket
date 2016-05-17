@@ -1,4 +1,4 @@
-# npmo-auth-bitbucket
+# npme-auth-bitbucket
 
 > Integrate Bitbucket auth in your npm Enterprise instance
 

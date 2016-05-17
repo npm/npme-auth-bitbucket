@@ -1,5 +1,5 @@
 {
-  "name": "@npm/npmo-auth-bitbucket",
+  "name": "@npm/npme-auth-bitbucket",
   "version": "0.1.1",
   "description": "Integrate Bitbucket auth in your npm Enterprise instance",
   "main": "index.js",
@@ -14,22 +14,22 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/npm/npmo-auth-bitbucket.git"
+    "url": "git+ssh://git@github.com/npm/npme-auth-bitbucket.git"
   },
   "keywords": [
     "bitbucket",
     "atlassian",
     "enterprise",
-    "npmo",
+    "npme",
     "oauth",
     "oauth2"
   ],
   "author": "Andrew Goode <andrew@npmjs.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/npm/npmo-auth-bitbucket/issues"
+    "url": "https://github.com/npm/npme-auth-bitbucket/issues"
   },
-  "homepage": "https://github.com/npm/npmo-auth-bitbucket#readme",
+  "homepage": "https://github.com/npm/npme-auth-bitbucket#readme",
   "dependencies": {
     "bluebird": "^3.2.2",
     "github-url-from-git": "^1.4.0",
