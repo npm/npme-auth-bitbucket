@@ -43,7 +43,7 @@ test('_getSession returns null if precondition not met', async function (t) {
 
 test('_getSession returns session if precondition is met', async function (t) {
   return new Authenticator({ redisClient: new MockRedisClient() })._getSession(true).then((session) => {
-    t.ok(session)
+    t.truthy(session)
   })
 })
 
@@ -54,7 +54,7 @@ test('_getSession returns same session if called twice', async function (t) {
     s = session
   })
   return authenticator._getSession(true).then((session) => {
-    t.same(session, s)
+    t.deepEqual(session, s)
   })
 })
 
@@ -101,7 +101,7 @@ test('_getAuthorizationToken returns valid structure', async function (t) {
     password: 'paddywagon',
     name: 'overwritten'
   }).then((auth) => {
-    t.same(auth, {
+    t.deepEqual(auth, {
       token: 'yo',
       user: {
         name: 'fidget',
@@ -115,13 +115,13 @@ test('_getAuthorizationToken returns valid structure', async function (t) {
 test('_getAuthorizationToken allows you to catch() an error', async function (t) {
   let oauthApi = new MockOAuthApi(new Error('problemos muchachos'))
   return new Authenticator({ oauthApi: oauthApi })._getAuthorizationToken().catch((err) => {
-    t.ok(err)
+    t.truthy(err)
   })
 })
 
 test('authenticate rejects invalid credentials', async function (t) {
   new Authenticator().authenticate(null, (err) => {
-    t.ok(err)
+    t.truthy(err)
     t.is(err.statusCode, 500)
   })
 })
@@ -139,8 +139,8 @@ test('authenticate calls oauth api, stores a refresh token, and returns npm-auth
       email: 'flippers@co.co'
     }
   }, (err, authentication) => {
-    t.notOk(err)
-    t.ok(authentication)
+    t.falsy(err)
+    t.truthy(authentication)
     t.is(authentication.token, 'hola')
     t.is(authentication.refreshToken, 'mundo')
     t.is(authentication.user.name, 'fundip')
@@ -155,7 +155,7 @@ test('unauthenticate attempts to delete refresh token', async function (t) {
   return new Authenticator({
     redisClient: redisClient
   }).unauthenticate('toe-kin', (err) => {
-    t.notOk(err)
+    t.falsy(err)
     t.is(redisClient.delKey, 'refresh-toe-kin')
   })
 })
@@ -170,6 +170,6 @@ test('unauthenticate swallows errors', async function (t) {
   return new Authenticator({
     redisClient: redisClient
   }).unauthenticate('detonate', (err) => {
-    t.notOk(err)
+    t.falsy(err)
   })
 })
