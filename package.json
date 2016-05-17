@@ -1,6 +1,6 @@
 {
   "name": "@npm/npme-auth-bitbucket",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "Integrate Bitbucket auth in your npm Enterprise instance",
   "main": "index.js",
   "files": [
@@ -10,7 +10,8 @@
   "scripts": {
     "pretest": "standard",
     "test": "nyc ava",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "release": "standard-version"
   },
   "repository": {
     "type": "git",
@@ -42,7 +43,8 @@
     "babel-eslint": "^6.0.4",
     "coveralls": "^2.11.9",
     "nyc": "^6.4.4",
-    "standard": "^7.1.0"
+    "standard": "^7.1.0",
+    "standard-version": "^2.2.1"
   },
   "standard": {
     "parser": "babel-eslint"
