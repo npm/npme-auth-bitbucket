@@ -44,7 +44,7 @@
     "coveralls": "^2.11.9",
     "nyc": "^6.4.4",
     "standard": "^7.1.0",
-    "standard-version": "^2.2.1"
+    "standard-version": "^9.0.0"
   },
   "standard": {
     "parser": "babel-eslint"
